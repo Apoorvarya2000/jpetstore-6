@@ -1,5 +1,17 @@
-FROM openjdk:17.0.2
-COPY . /usr/src/myapp
+# Use OpenJDK 17 base image
+FROM openjdk:17-jdk-slim
+
+# Set working directory
 WORKDIR /usr/src/myapp
+
+# Copy project files
+COPY . .
+
+# Build the project while skipping tests and license plugin
 RUN ./mvnw clean package -DskipTests -Dlicense.skip=true
-CMD ./mvnw cargo:run -P tomcat90
+
+# Expose port (adjust if your app uses a different one)
+EXPOSE 8080
+
+# Run the app
+CMD ["java", "-jar", "target/jpetstore.war"]
